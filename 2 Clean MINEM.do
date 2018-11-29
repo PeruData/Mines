@@ -1,10 +1,9 @@
 *************************************************************************
 * Peruvian Mining Production dataset - Part 2
 * Sebastian Sardon
-* Last updated: Dec 2017
-* Creates mining production dataset using output of 'spreadsheets to dta'
-* Reference period: 2002-2017
-*Note: takes as input prices from "Mining Prices.do" [00_Data, Ketchup]
+* Last updated: Nov 2018
+* Reference period: 2001-2017
+*Note: takes as output from "1 Scrap MINEM.py"
 *************************************************************************
 
 cap restore
@@ -143,56 +142,3 @@ save "Mines/Production/out/mines_production_01_17.dta", replace
 		gsort -value_pc
 		compress
 save "Mines/Production/out/dists_production_01_17.dta", replace	
-	
-sort year	
-local line1  (line value_MM year if ubigeo == "021014")
-local line2  (line value_MM year if ubigeo == "040127") 
-local line3  (line value_MM year if ubigeo == "030506") 
-local line4  (line value_MM year if ubigeo == "120805")
-local line5  (line value_MM year if ubigeo == "080801")
-local line6  (line value_MM year if ubigeo == "180106")
-local line7  (line value_MM year if ubigeo == "230302")
-local line8  (line value_MM year if ubigeo == "110203")
-local line9  (line value_MM year if ubigeo == "080708")
-local line10  (line value_MM year if ubigeo == "060101")
-
-local lab1 lab(1  "San Marcos, Áncash")
-local lab1 lab(2  "Yarabamba, Arequipa")
-local lab1 lab(3  "Challhuahuacho, Apurímac")
-local lab1 lab(4  "Morococha, Junín")
-local lab1 lab(5  "Espinar, Cusco")
-local lab1 lab(6  "San Marcos, Ancash")
-local lab1 lab(7  "San Marcos, Ancash")
-local lab1 lab(8  "San Marcos, Ancash")
-local lab1 lab(9  "San Marcos, Ancash")
-local lab1 lab(10 "San Marcos, Ancash")
-
-
-local lines   `line1' `line2' `line3' `line4' `line5' `line6' `line7' `line8' `line9' `line10'
-local leg_lab `lab1'  `lab2'  `lab3'  `lab4'  `lab5'  `lab6'  `lab7'  `lab8'  `lab9'  `lab10'
-local leg legend(`leg_lab' pos(3) cols(1) size(small))
-twoway `lines', graphregion(fcolor(white))	`leg' 
-	
-	
-	
-*For use in paper		
-		*		drop if year<2004 | year>2011
-		*replace value_MM_aduanas = 0 if value_MM_aduanas == .
-		*replace value_MM_WB      = 0 if value_MM_WB      == .
-		*gen     value_pc_aduanas = value_MM_aduanas*1000000/population
-		*gen     value_pc_WB      = value_MM_WB*1000000/population
-		*preserve
-		*	collapse (sum) value_pc_aduanas value_pc_WB, by(ubigeo)
-		*	rename value_pc_aduanas value_m_pc_dist
-		*	label var value_m_pc_dist "Cumm. Sum of pc mining production (current USD)"
-		*	save "00_Data/Mines/Production/out/prod_districts.dta",replace	
-		*restore
-		*gen prov_code = substr(ubigeo, 1, 4) 
-		*collapse (sum) value_MM_aduanas value_MM_WB population, by(prov_code year)
-		*gen     value_pc_aduanas = value_MM_aduanas*1000000/population
-		*gen     value_pc_WB      = value_MM_WB*1000000/population			
-		*collapse value_pc_aduanas value_pc_WB population, by(prov_code)
-		*rename value_pc value_m_pc_prov
-		*label var value_pc_aduanas "Cumm. Sum of pc mining production (current USD)"
-		*save "00_Data/Mines/Production/out/prod_provinces.dta",replace	
-		*save "/Users/Sebastian/Documents/Papers/Ketchup/00_Data/out/mn_prod_provinces_fromTIE.dta",replace	
