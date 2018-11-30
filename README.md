@@ -6,6 +6,6 @@ The following figures can be replicated with the dataset
 
 ![](images/dists_lines.png)
 
-![](images/Mining Dists 2001.png.png)
+![](images/Mining_Dists_2001.png)
 
-![](images/Mining Dists 2017.png.png)
+![](images/Mining_Dists_2017.png)
