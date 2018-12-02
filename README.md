@@ -6,7 +6,7 @@ The following figures can be replicated with the dataset:
 
 <p float="left">
   <img src="images/Mining_Dists_2001.png" width="280" />
-  <img src="images/Mining_Dists_2017.png" width="280" /> 
+  <img src="images/Mining_Dists_2011.png" width="280" /> 
   <img src="images/Mining_Dists_2017.png" width="280" /> 
 </p>
 
