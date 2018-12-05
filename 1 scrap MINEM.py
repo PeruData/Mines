@@ -18,6 +18,7 @@ def to_ascii(x): #handles common non-ASCII characters
         for i in range(len(original)):
             x         = x.replace(original[i],modified[i])
         x = x.upper()
+        x = x.replace("REFINACION", "REFINERIA")
     return x
 
 #1) Scrap .xlsx files
