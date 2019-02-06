@@ -161,15 +161,3 @@ save "Mines/Production/out/mines_production_01_17.dta", replace
 		compress
 		
 save "Mines/Production/out/dists_production_01_17.dta", replace	
-
-
-*6. Provinces Panel dataset
-		drop value_m_pc
-		gen prov_code = substr(ubigeo,1,4)
-		collapse (sum) value_MM population, by(prov_code dep prov year)	
-		gen value_m_pc = 1000000*value_MM/population
-        replace value_m_pc = 0 if value_m_pc == .
-		format value_m_pc %15.0fc
-		gsort -value_m_pc
-		compress
-save "Mines/Production/out/provs_production_01_17.dta", replace	
