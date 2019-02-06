@@ -1,14 +1,13 @@
 *************************************************************************
 * Peruvian Mining Production dataset - Part 2
 * Sebastian Sardon
-* Last updated: Nov 2018
+* Last updated: Feb 6, 2018
+* Creates mining production dataset
 * Reference period: 2001-2017
-*Note: takes as output from "1 Scrap MINEM.py"
 *************************************************************************
 
 cap restore
 clear all 
-set more off
 global ccc "/Users/Sebastian/Documents/Papers/Mines SSB/00_Data"
 cd "$ccc"
 
@@ -30,7 +29,6 @@ use "Mines/Production/in/production_raw.dta", clear
 	rename provincia prov
 	rename distrito dist
 	
-
 *1. get USD value of production
 	merge m:1 mineral year using "Prices/prices.dta", keep(1 3)
 	
@@ -118,27 +116,60 @@ sort dep prov dist year value_MM
 	replace prov = "NASCA"   if prov == "NAZCA"
 	replace dist = "ESPINAR" if dist == "YAURI"
 	replace prov = "OYON"    if dist == "OYON"
+        *FIX UNASSIGNED: MDDs  output to MADRE DE DIOS, MANU, MADRE DE DIOS (almost 100% of MDD dep's production, and all unassigned is from MDD)
+		*                unassigned output from other departments is dropped (300MM in 2016 and 2017, most of it from Puno [!] )
+    drop if dep == "REGIONAL" & firm != "MADRE DE DIOS"
+	
+	replace dist = "MADRE DE DIOS" if dep == "REGIONAL" | dist == "-------"
+    replace prov = "MANU"          if dep == "REGIONAL" | prov == "-------"
+    replace dep  = "MADRE DE DIOS" if dep == "REGIONAL"
+
 save "Mines/Production/out/mines_production_01_17.dta", replace
 
 *5. Districts Panel dataset
-    drop if dep == "REGIONAL"
+    *should drop 0 obs, else check
+	drop if dep == "REGIONAL"
 	collapse (sum) value_MM, by(dep prov dist year)
-	
-	merge m:1 dep prov dist using "Mines/Production/in/ubigeos.dta", keep(1 3) keepusing(dep prov dist ubigeo) nogen
+	preserve
+	    clear
+		gen year = .
+		forvalues yy = 2001/2017{
+		    append using "Mines/Production/in/ubigeos.dta"
+		    replace year = `yy' if year == .
+		    }
+		tempfile temp
+		save `temp', replace
+	restore	
+	merge m:1 year dep prov dist using `temp', keepusing(dep prov dist ubigeo) nogen
 
 	*4.1 bring in population and calculate pc production value
-		merge 1:1 ubigeo year using "Population/population INEI.dta", keepusing(population) nogen
+		merge 1:1 ubigeo year using "Population/population INEI.dta", keep(1 3) keepusing(population) nogen
 		foreach var in dep prov dist {
 		    rename `var' `var'1
 			}
-		merge m:1 ubigeo using "Mines/Production/in/ubigeos.dta", keep(1 3) keepusing(dep prov dist) nogen
+		merge m:1 ubigeo using "Mines/Production/in/ubigeos.dta", keepusing(dep prov dist) nogen
 		foreach var in dep prov dist {
 		    replace `var' = `var'1 if `var' == ""
 			drop `var'1
 			}
-		replace value_MM = 0 if value_MM == .
-		gen value_pc = 1000000*value_MM/population
-		format value_pc %15.0fc
-		gsort -value_pc
+		gen value_m_pc = 1000000*value_MM/population
+		replace value_MM   = 0 if value_MM   == .
+		replace value_m_pc = 0 if value_m_pc == .
+        format population     %15.0fc
+		format value_m_pc %15.0fc
+		gsort -value_m_pc
 		compress
+		
 save "Mines/Production/out/dists_production_01_17.dta", replace	
+
+
+*6. Provinces Panel dataset
+		drop value_m_pc
+		gen prov_code = substr(ubigeo,1,4)
+		collapse (sum) value_MM population, by(prov_code dep prov year)	
+		gen value_m_pc = 1000000*value_MM/population
+        replace value_m_pc = 0 if value_m_pc == .
+		format value_m_pc %15.0fc
+		gsort -value_m_pc
+		compress
+save "Mines/Production/out/provs_production_01_17.dta", replace	
