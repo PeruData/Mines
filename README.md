@@ -1,6 +1,8 @@
 # Mines_2001-2017
 
-Panel dataset of Peruvian districts' mining production
+Programs that download spreadsheets from the Ministry of Energy and Mines (MINEM) and use them to build a panel dataset of Peruvian districts' mining production.
+
+Output dataset available at https://www.dropbox.com/sh/qnof8t49l1l51h1/AAB_4-XEjIYbd_DAn37zfQDVa?dl=0
 
 The following figures can be replicated with the dataset:
 
