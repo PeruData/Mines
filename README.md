@@ -1,5 +1,7 @@
 # Mines_2001-2017
 
+Author: Sebastian Sardon
+
 Programs that download spreadsheets from the Ministry of Energy and Mines (MINEM) and use them to build a panel dataset of Peruvian districts' mining production.
 
 Instructions:\
