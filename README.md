@@ -13,9 +13,9 @@ Output dataset available [here](https://www.dropbox.com/sh/qnof8t49l1l51h1/AAB_4
 The following figures can be replicated with the dataset:
 
 <p float="left">
-  <img src="images/Mining_Dists_2001.png" width="300" />
-  <img src="images/Mining_Dists_2011.png" width="300" /> 
-  <img src="images/Mining_Dists_2017.png" width="300" /> 
+  <img src="images/Mining_Dists_2001.png" width="290" />
+  <img src="images/Mining_Dists_2011.png" width="290" /> 
+  <img src="images/Mining_Dists_2017.png" width="290" /> 
 </p>
 
 ![](images/dists_lines.png)
