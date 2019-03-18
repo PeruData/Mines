@@ -1,5 +1,5 @@
 *************************************************************************
-* Peruvian Mining Production dataset - Part 2
+* Peruvian Mining Production dataset
 * Sebastian Sardon
 * Last updated: Feb 6, 2018
 * Creates mining production dataset
@@ -173,25 +173,3 @@ save "Mines/Production/out/dists_production_01_17.dta", replace
 		gsort -value_m_pc
 		compress
 save "Mines/Production/out/provs_production_01_17.dta", replace	
-	
-*For use in paper		
-		*		drop if year<2004 | year>2011
-		*replace value_MM_aduanas = 0 if value_MM_aduanas == .
-		*replace value_MM_WB      = 0 if value_MM_WB      == .
-		*gen     value_m_pc_aduanas = value_MM_aduanas*1000000/population
-		*gen     value_m_pc_WB      = value_MM_WB*1000000/population
-		*preserve
-		*	collapse (sum) value_m_pc_aduanas value_m_pc_WB, by(ubigeo)
-		*	rename value_m_pc_aduanas value_m_pc_dist
-		*	label var value_m_pc_dist "Cumm. Sum of pc mining production (current USD)"
-		*	save "00_Data/Mines/Production/out/prod_districts.dta",replace	
-		*restore
-		*gen prov_code = substr(ubigeo, 1, 4) 
-		*collapse (sum) value_MM_aduanas value_MM_WB population, by(prov_code year)
-		*gen     value_m_pc_aduanas = value_MM_aduanas*1000000/population
-		*gen     value_m_pc_WB      = value_MM_WB*1000000/population			
-		*collapse value_m_pc_aduanas value_m_pc_WB population, by(prov_code)
-		*rename value_m_pc value_m_pc_prov
-		*label var value_m_pc_aduanas "Cumm. Sum of pc mining production (current USD)"
-		*save "00_Data/Mines/Production/out/prod_provinces.dta",replace	
-		*save "/Users/Sebastian/Documents/Papers/Ketchup/00_Data/out/mn_prod_provinces_fromTIE.dta",replace	
