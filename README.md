@@ -1,4 +1,4 @@
-# Mines_2001-2017
+# Mines (2001-2017)
 
 Author: Sebastian Sardon
 
